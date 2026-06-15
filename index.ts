@@ -365,6 +365,7 @@ class MongoConnector extends AdminForthBaseConnector implements IAdminForthDataS
 
         pipeline.push({ $group: groupStage });
 
+        
         pipeline.push({
             $project: {
                 _id: 0,
