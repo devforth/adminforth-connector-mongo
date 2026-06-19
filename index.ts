@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import { MongoClient } from 'mongodb';
 import { Decimal128, Double } from 'bson';
 import { IAdminForthDataSourceConnector, IAdminForthSingleFilter, IAdminForthAndOrFilter, AdminForthResource, IAggregationRule, IGroupByRule, IGroupByDateTrunc, IGroupByField } from 'adminforth';
-import { afLogger } from 'adminforth';
+import { afLogger, checkIfFieldIsInsideResourceColumns } from 'adminforth';
 import { AdminForthDataTypes, AdminForthFilterOperators, AdminForthSortDirections, AdminForthBaseConnector } from 'adminforth';
 
 const escapeRegex = (value: any) => {
@@ -427,6 +427,10 @@ class MongoConnector extends AdminForthBaseConnector implements IAdminForthDataS
         }
     ): Promise<any[]> {
 
+
+        if (sort.some(s => !checkIfFieldIsInsideResourceColumns(s.field, resource))) {
+            throw new Error(`Invalid sort field: ${sort.find(s => !checkIfFieldIsInsideResourceColumns(s.field, resource))?.field}`);
+        }
         // const columns = resource.dataSourceColumns.filter(c=> !c.virtual).map((col) => col.name).join(', ');
         const tableName = resource.table;
 

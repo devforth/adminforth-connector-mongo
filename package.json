@@ -26,7 +26,7 @@
   "devDependencies": {
     "@types/mongodb": "^3.6.20",
     "@types/node": "latest",
-    "adminforth": "^3.1.0",
+    "adminforth": "^3.2.6",
     "semantic-release": "^24.2.1",
     "semantic-release-slack-bot": "^4.0.2",
     "typescript": "^5.7.3"
@@ -62,6 +62,6 @@
     }
   ],
   "peerDependencies": {
-    "adminforth": "^3.1.0"
+    "adminforth": "^3.2.6"
   }
 }
