@@ -167,6 +167,11 @@ class MongoConnector extends AdminForthBaseConnector implements IAdminForthDataS
     }
       
     
+    async isDatabaseEmpty(): Promise<boolean> {
+        const collections = await this.client.db().listCollections({}, { nameOnly: true }).toArray();
+        return collections.every((collection: { name: string }) => collection.name.startsWith('system.'));
+    }
+
     async discoverFields(resource: any) {
         return resource.columns.filter((col: any) => !col.virtual).reduce((acc: any, col: any) => {
             if (!col.type) {
