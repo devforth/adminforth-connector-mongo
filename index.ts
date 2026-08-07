@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { MongoClient } from 'mongodb';
 import { Decimal128, Double } from 'bson';
-import { IAdminForthDataSourceConnector, IAdminForthSingleFilter, IAdminForthAndOrFilter, AdminForthResource, IAggregationRule, IGroupByRule, IGroupByDateTrunc, IGroupByField } from 'adminforth';
+import { IAdminForthDataSourceConnector, IAdminForthSingleFilter, IAdminForthAndOrFilter, AdminForthResource, IAggregationRule, IGroupByRule, IGroupByDateTrunc, IGroupByField, AdminForthResourceColumn } from 'adminforth';
 import { afLogger, checkIfFieldIsInsideResourceColumns } from 'adminforth';
 import { AdminForthDataTypes, AdminForthFilterOperators, AdminForthSortDirections, AdminForthBaseConnector } from 'adminforth';
 
@@ -504,6 +504,13 @@ class MongoConnector extends AdminForthBaseConnector implements IAdminForthDataS
         const tableName = resource.table;
         const collection = this.client.db().collection(tableName);
         const columns = Object.keys(record);
+
+        const knownColumns = new Set(resource.dataSourceColumns.map((col: AdminForthResourceColumn) => col.name));
+        const unknownColumn = columns.find((colName) => !knownColumns.has(colName));
+        if (unknownColumn) {
+            throw new Error(`Invalid column name: ${unknownColumn}`);
+        }
+        
         const newRecord: any = {};
         for (const colName of columns) {
             newRecord[colName] = record[colName];
