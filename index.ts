@@ -45,7 +45,7 @@ class MongoConnector extends AdminForthBaseConnector implements IAdminForthDataS
     }
 
     OperatorsMap = {
-        [AdminForthFilterOperators.EQ]: (value: any) => value,
+        [AdminForthFilterOperators.EQ]: (value: any) => ({ $eq: value }),
         [AdminForthFilterOperators.NE]: (value: any) => ({ $ne: value }),
         [AdminForthFilterOperators.GT]: (value: any) => ({ $gt: value }),
         [AdminForthFilterOperators.LT]: (value: any) => ({ $lt: value }),
